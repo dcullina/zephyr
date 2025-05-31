@@ -31,7 +31,8 @@
  * The profile is not limited to carrier phone calls and can be used with common applications like
  * Discord and Teams.
  */
-#include <stdint.h>
+
+#include <stddef.h>
 
 #include <zephyr/autoconf.h>
 #include <zephyr/bluetooth/audio/tbs.h>
@@ -141,8 +142,10 @@ struct bt_ccp_call_control_client_cb {
 	void (*discover)(struct bt_ccp_call_control_client *client, int err,
 			 struct bt_ccp_call_control_client_bearers *bearers);
 
-	/** @internal Internally used field for list handling */
+	/** @cond INTERNAL_HIDDEN */
+	/** Internally used field for list handling */
 	sys_snode_t _node;
+	/** @endcond */
 };
 
 /**
@@ -171,7 +174,7 @@ int bt_ccp_call_control_client_discover(struct bt_conn *conn,
  *
  * @param cb The callback struct
  *
- * @retval 0 Succsss
+ * @retval 0 Success
  * @retval -EINVAL @p cb is NULL
  * @retval -EEXISTS @p cb is already registered
  */
@@ -182,11 +185,24 @@ int bt_ccp_call_control_client_register_cb(struct bt_ccp_call_control_client_cb 
  *
  * @param cb The callback struct
  *
- * @retval 0 Succsss
+ * @retval 0 Success
  * @retval -EINVAL @p cb is NULL
  * @retval -EALREADY @p cb is not registered
  */
 int bt_ccp_call_control_client_unregister_cb(struct bt_ccp_call_control_client_cb *cb);
+
+/**
+ * @brief Get the bearers of a client instance
+ *
+ * @param[in]  client  The client to get the bearers of.
+ * @param[out] bearers The bearers struct that will be populated with the bearers of @p client.
+
+ * @retval 0 Success
+ * @retval -EINVAL @p client or @p bearers is NULL
+ */
+int bt_ccp_call_control_client_get_bearers(struct bt_ccp_call_control_client *client,
+					   struct bt_ccp_call_control_client_bearers *bearers);
+
 /** @} */ /* End of group bt_ccp_call_control_client */
 #ifdef __cplusplus
 }

@@ -198,6 +198,7 @@ struct tcp_mss_option {
 
 enum tcp_state {
 	TCP_UNUSED = 0,
+	TCP_CLOSED,
 	TCP_LISTEN,
 	TCP_SYN_SENT,
 	TCP_SYN_RECEIVED,
@@ -207,8 +208,7 @@ enum tcp_state {
 	TCP_CLOSE_WAIT,
 	TCP_CLOSING,
 	TCP_LAST_ACK,
-	TCP_TIME_WAIT,
-	TCP_CLOSED
+	TCP_TIME_WAIT
 };
 
 enum tcp_data_mode {
@@ -338,6 +338,7 @@ struct tcp { /* TCP connection */
 #endif /* CONFIG_NET_TCP_KEEPALIVE */
 	bool tcp_nodelay : 1;
 	bool addr_ref_done : 1;
+	bool rst_received : 1;
 };
 
 #define _flags(_fl, _op, _mask, _cond)					\
